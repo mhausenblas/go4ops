@@ -1,0 +1,498 @@
+Go for ops
+http://301.sh/go4ops
+09:00 27 Jun 2018
+Tags: Go, programming, tutorial
+
+Michael Hausenblas
+Developer Advocate, Red Hat
+http://mhausenblas.info
+@mhausenblas
+
+* fmt.Sprintf("%v", mhausenblas)
+
+- Working on distributed systems in the past ~20 years, in containers space 4+ years
+- Web data and big data in applied research AT/IE and MapR
+- Container orchestrators (Mesosphere: Mesos/K8S, Red Hat: K8S)
+- Developer turned ops
+- C++, Java, Python, JavaScript/Node.js and since ~2014 a Gopher
+
+* Agenda
+
+- Why Go?
+- Tooling
+- Language features by example
+- Advanced Go programming
+- Good practices (idiomatic Go, containers)
+
+* Why Go?
+
+* History
+
+.code img/design_notes
+
+[[https://talks.golang.org/2015/gophercon-goevolution.slide][More …]]
+
+* History
+
+.image img/influences.png 500 _
+
+* Community
+
+* Community: discussions
+
+.background img/community.png
+
+When you need help, want to ask or discuss something …
+
+.link https://groups.google.com/forum/#!forum/golang-nuts golang-nuts@googlegroups.com
+.link https://invite.slack.golangbridge.org/ gophers.slack.com
+.link https://www.reddit.com/r/golang/ /r/golang on Reddit
+.link http://stackoverflow.com/questions/tagged/go #go on StackOverflow
+
+* Community: news
+
+.background img/community.png
+
+When you want to learn about new developments, exchange thoughts and meet other Gophers …
+
+.link https://www.youtube.com/user/gocoding Go channel on YouTube
+.link https://www.gophercon.com/ gophercon.com
+.link https://www.dotgo.eu/ dotgo.eu
+.link https://golangweekly.com/ golangweekly.com
+
+* Tooling
+
+* Tooling (1/3)
+
+From build to test:
+
+      build       compile packages and dependencies
+      clean       remove object files
+      doc         show documentation for package or symbol
+      env         print Go environment information
+      bug         start a bug report
+      fix         run go tool fix on packages
+      fmt         run gofmt on package sources
+      generate    generate Go files by processing source
+      get         download and install packages and dependencies
+      install     compile and install packages and dependencies
+      list        list packages
+      run         compile and run Go program
+      test        test packages
+      tool        run specified go tool
+      version     print Go version
+      vet         run go tool vet on packages
+
+* Tooling (2/3)
+
+For simple, one-shot execution:
+
+  $ go run main.go
+
+For non-trivial, standalone programs:
+
+  $ go install
+
+For libraries:
+
+  $ go build
+
+Go doc:
+
+  $ godoc -http=":6060"
+  $ go doc os.TempDir
+
+* Tooling (3/3)
+
+Publish and share your docs:
+
+[[https://godoc.org/][godoc.org]]
+
+Check compliance with best practices:
+
+[[https://goreportcard.com][goreportcard.com]]
+
+Make sure to work through:
+
+[[https://github.com/campoy/go-tooling-workshop][Go Tooling in Action]]
+
+
+* Language features
+
+* Language features
+
+- Statically typed, compiled
+- Native binaries (Linux, macOS, Windows)
+- Garbage collected
+- Comprehensive [[https://golang.org/pkg/][standard lib]]
+- Concurrency a 1st-class citizen
+- No magic
+
+Next: Language features by example, hands-on
+
+* Setup
+
+1. Install Go on your machine
+
+Visit [[https://golang.org/doc/install][golang.org/doc/install]] and choose your platform-dependent install procedure.
+
+2. Set up work environment
+
+For example, if you choose as your work environment `/Users/someuser/work`, then add the following to `.bashrc`:
+
+  export GOPATH=/Users/someuser/work
+  PATH=$PATH:$GOPATH/bin
+
+Note: `$GOPATH` is your base directory, all packages/binaries will be installed here.
+
+* Setup
+
+3. Get the code for the hands-on sessions
+
+  $ cd $GOPATH
+  $ mkdir -p src/github.com/mhausenblas/ && cd "$_"
+  $ git clone https://github.com/mhausenblas/go4systasks/ && cd go4systasks
+
+Going forward we call the directory you cloned the repo into `$G4SHOME`, in my case: `/Users/mhausenblas/Dropbox/dev/work/src/github.com/mhausenblas/go4systasks`
+
+Some more setup-related pointers:
+
+- [[https://golang.org/doc/code.html][How to Write Go Code]]
+- [[https://golang.org/cmd/][Commands]]
+- [[https://github.com/golang/go/wiki/IDEsAndTextEditorPlugins][Editor/IDE-specific support]]
+- Zero setup with the [[https://play.golang.org][Go Playground]]
+
+* Hello World!
+
+.code -numbers code/hello-world/main.go
+
+To run this, do the following:
+
+  $ cd $G4SHOME/day1/code/hello-world/
+  $ go run main.go
+
+*Check*: what just happened? Consult `go run -h` to learn more.
+
+* A more realistic Hello World!
+
+.code -numbers code/hello-world-for-real/main.go
+
+* A more realistic Hello World!
+
+Do the following:
+
+  $ cd $G4SHOME/day1/code/hello-world-for-real/
+  $ go run main.go
+  $ G4S_LANG=de go run main.go
+
+*Check*: compare the output with and without the environment variable `G4S_LANG` set and explain what happened.
+
+Note:
+
+- env variables, see also package [[https://golang.org/pkg/os/][os]]
+- `init()` function, read [[https://medium.com/golangspec/init-functions-in-go-eac191b3860a][here]] for more (also: multiple `init()` functions)
+- Unicode (UTF-8) natively, read [[https://blog.golang.org/strings][Strings, bytes, runes and characters in Go]] for more
+
+* Slices
+
+.code -numbers code/slices/main.go
+
+Note: the full code is available at [[code/slices/main.go][code/slices/main.go]]
+
+* Maps
+
+.code -numbers code/maps/main.go
+
+Note: the full code is available at [[code/maps/main.go][code/maps/main.go]]
+
+* Structs (1/2)
+
+.code -numbers code/structs/main.go /BEGINS/,/ENDS/
+
+* Structs (2/2)
+
+.code -numbers code/structs/main.go /BEGINC/,/ENDC/
+
+Note: the full code is available at [[code/structs/main.go][code/structs/main.go]]
+
+* Functions
+
+.code -numbers code/functions/main.go /BEGIND/,/ENDD/
+.code -numbers code/functions/main.go /BEGINC/,/ENDC/
+
+Note: the full code is available at [[code/functions/main.go][code/functions/main.go]]
+
+* Methods
+
+.code -numbers code/methods/main.go /BEGIND/,/ENDD/
+.code -numbers code/methods/main.go /BEGINC/,/ENDC/
+
+Note: the full code is available at [[code/methods/main.go][code/methods/main.go]]
+
+* Errors
+
+.code -numbers code/errors/main.go /BEGIND/,/ENDD/
+.code -numbers code/errors/main.go /BEGINC/,/ENDC/
+
+Note: the full code is available at [[code/errors/main.go][code/errors/main.go]]
+
+* Interfaces
+
+.code -numbers code/interfaces/main.go /BEGIN/,/END/
+
+Note: the full code is available at [[code/interfaces/main.go][code/interfaces/main.go]]
+
+* Packages and visibility (1/3)
+
+.code -numbers code/modules/main.go
+
+Note: the full code is available at [[code/modules/main.go][code/modules/main.go]]
+
+* Packages and visibility (2/3)
+
+.code -numbers code/modules/something/part.go  /BEGIN/,/END/
+
+Note: the full code is available at [[code/modules/something/part.go][code/modules/something/part.go]]
+
+* Packages and visibility (3/3)
+
+Try out the following:
+
+- alias the `something` package with:
+ import (
+  so "github.com/mhausenblas/go4systasks/day1/code/modules/something"
+ )
+- try to access `something.internalfunc()` from `main.go`
+
+See also:
+
+- Effective Go: [[https://golang.org/doc/effective_go.html#names][Package names]]
+- [[https://blog.learngoprogramming.com/definitive-guide-to-go-packages-focus-on-the-fundamentals-to-empower-your-skills-d14aae7cd321][Understanding Go Packages]]
+
+* Interactive user input
+
+.code -numbers code/userin/main.go /BEGIN/,/END/
+
+Note: the full code is available at [[code/userin/main.go][code/userin/main.go]]
+
+See also [[https://tutorialedge.net/golang/reading-console-input-golang/][Reading in Console Input in Golang]].
+
+* Files - Reading
+
+.code -numbers code/files-reading/main.go
+
+Note: the full code is available at [[code/files-reading/main.go][code/files-reading/main.go]]
+
+* Files - Writing
+
+.code -numbers code/files-writing/main.go /BEGIN/,/END/
+
+Note: the full code is available at [[code/files-writing/main.go][code/files-writing/main.go]]
+
+* Shelling out (1/2)
+
+.code -numbers code/shell-out/main.go
+
+Note: the full code is available at [[code/shell-out/main.go][code/shell-out/main.go]]
+
+* Shelling out (2/2)
+
+See also:
+
+- `os.exec` package [[https://golang.org/pkg/os/exec/#pkg-examples][examples]]
+- [[http://www.darrencoxall.com/golang/executing-commands-in-go/][Executing Commands In Go]]
+- [[https://godoc.org/github.com/codeskyblue/go-sh][github.com/codeskyblue/go-sh]]
+
+* Testing (1/2)
+
+In [[code/testing/main.go][code/testing/main.go]]:
+.code -numbers code/testing/main.go  /BEGIN/,/END/
+
+In [[code/testing/main_test.go][code/testing/main_test.go]]:
+.code -numbers code/testing/main_test.go  /BEGIN/,/END/
+
+* Testing (2/2)
+
+Try out the following:
+
+  $ cd $G4SHOME/day1/code/testing/
+  $ go test -v
+
+See also:
+
+- [[https://github.com/golang/go/wiki/TableDrivenTests][Table driven tests]]
+- [[https://blog.golang.org/examples][Testable Examples in Go]]
+- [[https://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go][Benchmarks]]
+
+* Advanced Go programming
+
+* Files - Advanced/JSON
+
+.code -numbers code/files-advanced/main.go /BEGIND/,/ENDD/
+.code -numbers code/files-advanced/main.go /BEGINC/,/ENDC/
+
+Note: the full code is available at [[code/files-advanced/main.go][code/files-advanced/main.go]]
+
+* Time
+
+.code -numbers code/time/main.go /BEGIN/,/END/
+
+Note: the full code is available at [[code/time/main.go][code/time/main.go]]
+
+See also package [[https://golang.org/pkg/time/#pkg-constants][time]] for background on canonical time format.
+
+* Concurrency
+
+.code -numbers code/concurrency/main.go  /BEGIN/,/END/
+
+Note: the full code is available at [[code/concurrency/main.go][code/concurrency/main.go]]
+
+See also the [[https://tour.golang.org/concurrency/1][concurrency]] section of the official Go lang tour and the [[http://www.golangprograms.com/go-language/channels.html][Working with Channels]] article.
+
+* A service with an HTTP API (1/2)
+
+.code -numbers code/http-service/main.go
+
+* A service with an HTTP API (2/2)
+
+In one terminal session do:
+
+  $ cd $G4SHOME/day1/code/http-service/
+  $ go run main.go
+
+… and in another session, from any directory:
+
+  $ curl http://127.0.0.1:9876/data
+  {"title":"Let’s Go! Using the Go programming language for system tasks","count":22}
+
+Note: the full code is available at [[code/http-service/main.go][code/http-service/main.go]]
+
+For a more realistic setup use a HTTP request multiplexer such as [[http://www.gorillatoolkit.org/pkg/mux][gorilla/mux]].
+
+* CLI interaction and config (1/2)
+
+.code -numbers code/cli/main.go  /BEGIN/,/END/
+
+Note: the full code is available at [[code/cli/main.go][code/cli/main.go]]
+
+* CLI interaction and config (2/2)
+
+Try out the following:
+
+  $ cd $G4SHOME/day1/code/cli/
+  $ go run main.go
+  $ go run main.go -h
+  $ go run main.go --target=Dan
+  $ go run main.go --target=Dan --repeat=2
+
+For a more realistic setup use:
+
+- [[https://github.com/spf13/cobra][spf13/cobra]] (CLI interactions)
+- [[hhttps://github.com/spf13/viper][spf13/viper]] (config)
+
+* Dependency management (1/2)
+
+Use Go [[https://github.com/golang/dep][dep]] to manage dependencies. First, install it like so:
+
+  $ go get -u github.com/golang/dep/cmd/dep
+
+Now do the following to create the dependencies:
+
+  $ cd $G4SHOME/day1/code/dependency/
+  $ dep ensure
+
+As a result of above command you should now see a 'vendor/' sub-directory in `$G4SHOME/day1/code/dependency/` and you're ready to execute it.
+
+* Dependency management (2/2)
+
+.code -numbers code/dependency/main.go
+
+Note: the full code is available at [[code/dependency/main.go][code/dependency/main.go]]
+
+* Good practices
+
+* Idiomatic Go
+
+- [[https://golang.org/doc/effective_go.html][Effective Go]]
+- [[https://www.youtube.com/watch?v=PAAkCSZUG1c][Go Proverbs]]
+- [[http://peter.bourgon.org/go-best-practices-2016/][Go best practices, six years in]]
+- [[https://www.youtube.com/watch?v=29LLRKIL_TI][7 common mistakes in Go and when to avoid them]]
+- [[https://github.com/ksimka/go-is-not-good][ksimka/go-is-not-good]]
+- [[https://www.youtube.com/watch?v=gHCtEjzZ-rY][A Look at the Criticism of Go]]
+
+* Go and containers (1/4)
+
+Approaches:
+
+1. Full-blown
+
+- use Go environment as base image, such as `FROM` `golang:1.9`
+- has all the tooling included
+- large footprint and large security attack surface
+
+2. Light-weight
+
+- use any generic environment such as `busybox` or `ubuntu` or `centos` as base image
+- copy the resulting Go binary and potential artifacts such as images or style sheets
+- small footprint, contains only the necessary bits
+
+Let's have a look at concrete example in [[code/containers/][code/containers]] …
+
+* Go and containers (2/4)
+
+Example `Dockerfile` for *full-blown* approach:
+
+  FROM golang:1.9
+  COPY ./myapp /go/src/github.com/mhausenblas/myapp/
+  WORKDIR /go/src/github.com/mhausenblas/myapp
+  RUN go get ./
+  RUN go build
+  ./myapp
+
+If you've got Docker installed, you can try out:
+
+  $ docker build --tag=mhausenblas/pingsvc:1 --file=fbDockerfile .
+  $ docker run --rm --name fbping -d -p 8888:8888 mhausenblas/pingsvc:1
+  $ curl localhost:8888/ping
+  $ docker kill fbping
+
+* Go and containers (3/4)
+
+Example `Dockerfile` for *light-weight* approach:
+
+  FROM centos:7
+  WORKDIR /app
+  COPY ui/* ui/
+  RUN chown -R 1001:1 /app
+  USER 1001
+  COPY myapp .
+  RUN chmod +x myapp
+  CMD ["/app/myapp"]
+
+If you've got Docker installed, you can try out:
+
+  $ GOOS=linux GOARCH=amd64 go build
+  $ docker build --tag=mhausenblas/pingsvc:2 --file=lwDockerfile .
+  $ docker run --rm --name lwping -d -p 8888:8888 mhausenblas/pingsvc:2
+  $ curl localhost:8888/ping
+  $ docker kill lwping
+
+* Go and containers (4/4)
+
+Compare resulting images:
+
+  $ docker images "mhausenblas/pingsvc*"
+  REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
+  mhausenblas/pingsvc   2                   221aede73f00        2 minutes ago       198 MB
+  mhausenblas/pingsvc   1                   74f9e2a7dcc8        10 minutes ago      741 MB
+
+When to use and some tips, see:
+
+- [[https://medium.com/statuscode/golang-docker-for-development-and-production-ce3ad4e69673][post]] on Medium
+- [[https://www.oreilly.com/ideas/should-you-containerize-your-go-code][article]] on O'Reilly Radar
+
+* Embedding binary content
+
+- using libraries such as [[https://github.com/jteeuwen/go-bindata][go-bindata]]
+- using `go` `generate` (see for example this [[https://blog.golang.org/generate][blog post]])
+- ship with/in container image
