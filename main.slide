@@ -23,6 +23,10 @@ http://mhausenblas.info
 - Language features by example
 - Advanced Go programming
 - Good practices (idiomatic Go, containers)
+- A standard layout
+- Useful packages and tools
+- Case studies and patterns
+- Books
 
 * Why Go?
 
@@ -151,9 +155,9 @@ Note: `$GOPATH` is your base directory, all packages/binaries will be installed 
 
   $ cd $GOPATH
   $ mkdir -p src/github.com/mhausenblas/ && cd "$_"
-  $ git clone https://github.com/mhausenblas/go4systasks/ && cd go4systasks
+  $ git clone https://github.com/mhausenblas/go4ops/ && cd go4ops
 
-Going forward we call the directory you cloned the repo into `$G4SHOME`, in my case: `/Users/mhausenblas/Dropbox/dev/work/src/github.com/mhausenblas/go4systasks`
+Going forward we call the directory you cloned the repo into `$G4OHOME`, in my case: `/Users/mhausenblas/Dropbox/dev/work/src/github.com/mhausenblas/go4ops`
 
 Some more setup-related pointers:
 
@@ -168,7 +172,7 @@ Some more setup-related pointers:
 
 To run this, do the following:
 
-  $ cd $G4SHOME/day1/code/hello-world/
+  $ cd $G4OHOME/code/hello-world/
   $ go run main.go
 
 *Check*: what just happened? Consult `go run -h` to learn more.
@@ -181,7 +185,7 @@ To run this, do the following:
 
 Do the following:
 
-  $ cd $G4SHOME/day1/code/hello-world-for-real/
+  $ cd $G4OHOME/code/hello-world-for-real/
   $ go run main.go
   $ G4S_LANG=de go run main.go
 
@@ -260,7 +264,7 @@ Try out the following:
 
 - alias the `something` package with:
  import (
-  so "github.com/mhausenblas/go4systasks/day1/code/modules/something"
+  so "github.com/mhausenblas/go4ops/code/modules/something"
  )
 - try to access `something.internalfunc()` from `main.go`
 
@@ -315,7 +319,7 @@ In [[code/testing/main_test.go][code/testing/main_test.go]]:
 
 Try out the following:
 
-  $ cd $G4SHOME/day1/code/testing/
+  $ cd $G4OHOME/code/testing/
   $ go test -v
 
 See also:
@@ -357,7 +361,7 @@ See also the [[https://tour.golang.org/concurrency/1][concurrency]] section of t
 
 In one terminal session do:
 
-  $ cd $G4SHOME/day1/code/http-service/
+  $ cd $G4OHOME/code/http-service/
   $ go run main.go
 
 … and in another session, from any directory:
@@ -379,7 +383,7 @@ Note: the full code is available at [[code/cli/main.go][code/cli/main.go]]
 
 Try out the following:
 
-  $ cd $G4SHOME/day1/code/cli/
+  $ cd $G4OHOME/code/cli/
   $ go run main.go
   $ go run main.go -h
   $ go run main.go --target=Dan
@@ -398,10 +402,10 @@ Use Go [[https://github.com/golang/dep][dep]] to manage dependencies. First, ins
 
 Now do the following to create the dependencies:
 
-  $ cd $G4SHOME/day1/code/dependency/
+  $ cd $G4OHOME/code/dependency/
   $ dep ensure
 
-As a result of above command you should now see a 'vendor/' sub-directory in `$G4SHOME/day1/code/dependency/` and you're ready to execute it.
+As a result of above command you should now see a 'vendor/' sub-directory in `$G4OHOME/code/dependency/` and you're ready to execute it.
 
 * Dependency management (2/2)
 
@@ -496,3 +500,152 @@ When to use and some tips, see:
 - using libraries such as [[https://github.com/jteeuwen/go-bindata][go-bindata]]
 - using `go` `generate` (see for example this [[https://blog.golang.org/generate][blog post]])
 - ship with/in container image
+
+* A standard layout
+
+* A standard layout (1/2)
+
+Library:
+
+  pkg
+  ├── io
+  │   ├── doc.go
+  │   ├── types.go
+  │   └── onething.go
+  └── service
+      ├── constants.go
+      ├── doc.go
+      ├── part.go
+      └── types.go
+
+CLI app:
+
+   cli
+   ├── cmd
+   │   ├── doc.go
+   │   ├── launch.go
+   │   ├── root.go
+   │   └── version.go
+   └── main.go
+
+* A standard layout (2/2)
+
+`Makefile` for example:
+
+  version := 0.1.0
+
+  .PHONY: gbuild gtest cbuild cpush
+
+  release : gbuild gtest cbuild cpush
+
+  gbuild:
+    GOOS=linux GOARCH=amd64 go build -ldflags "-X main.releaseVersion=$(version)" -o ./myapp
+
+  gtest :
+    go test -short -run Test* ./pkg
+
+  cbuild :
+    docker build --build-arg rversion=$(rversion) -t quay.io/mhausenblas/myapp:$(version) .
+
+  cpush :
+    docker push quay.io/mhausenblas/myapp:$(version)
+
+* Useful packages and tools
+
+* Useful packages and tools (1/2)
+
+to read/write YAML files:
+.link http://gopkg.in/yaml.v2 gopkg.in/yaml.v2
+
+to build proper CLI apps:
+.link https://github.com/spf13/cobra spf13/cobra
+
+to manage configurations:
+.link https://github.com/spf13/viper spf13/viper
+
+for structured logging:
+.link https://github.com/Sirupsen/logrus Sirupsen/logrus
+
+for cross-platform filesystem notifications:
+.link https://github.com/fsnotify/fsnotify fsnotify/fsnotify
+
+* Useful packages and tools (2/2)
+
+to do advanced terminal output:
+.link https://github.com/buger/goterm buger/goterm
+
+to manage tabular output in terminal:
+.link https://github.com/olekukonko/tablewriter olekukonko/tablewriter
+
+to manage S3 (compatible) storage systems:
+.link https://github.com/minio/minio-go minio/minio-go
+
+to access the GitHub API:
+.link https://github.com/google/go-github google/go-github
+
+More via [[https://github.com/avelino/awesome-go][awesome-go]] …
+
+* Exercise
+
+* Exercise
+
+  Write a program that watches the current directory and warns you
+  if more than 3 files have been created.
+
+* Case studies and patterns
+
+* Case studies and patterns (1/2)
+
+- batch renaming files/directories: [[https://github.com/shenwei356/brename][shenwei356/brename]]
+- URL shortener using PostgreSQL: [[https://github.com/douglasmakey/ursho][douglasmakey/ursho]]
+- inspect Linux namespaces and cgroups: [[https://github.com/mhausenblas/cinf][mhausenblas/cinf]]
+- back up and restore Kubernetes clusters: [[https://github.com/mhausenblas/reshifter][mhausenblas/reshifter]]
+- container resource consumption management: [[https://github.com/openshift-demos/resorcerer][openshift-demos/resorcerer]]
+- library for implementing RBAC: [[https://github.com/ory/ladon][ory/ladon]]
+
+* Case studies and patterns (2/2)
+
+Others, not covered in this training, for self-study:
+
+- [[https://github.com/coreos/etcd][etcd]]
+- [[https://github.com/hashicorp/consul][Consul]]
+- [[https://github.com/kubernetes/kubernetes][Kubernetes]]
+
+* Implementing your own tool
+
+* Implementing your own tool (1/2)
+
+- Reimplement one of the tools you’ve developed in another language (bash scripts, Python, Ruby,  etc.)
+- Write a tool you will need in the near future, from scratch
+- If you have no idea, I'll provide some suggestions
+
+You've got 3 hours to complete and then we review together the results.
+
+* Implementing your own tool (2/2)
+
+Suggestions:
+
+- *Auto-backup*: if more than `N` files or `x` MB in a directory, create archive and put into S3 bucket
+- *Bookmarker*: HTTP service, backed by a database (Postgres, etc.), that supports storing and retrieval of URLs + metadata (title, size, tags)
+- *Simple* *chat*: allowing multiple users to chat (server role, client role)
+- *GitHub* *watchdog*: watch changes on a public git repo on GitHub, providing aggregate stats (number of commits, comments, issues, etc. per user)
+
+* Resources
+
+* References
+
+- [[https://regex-golang.appspot.com/assets/html/index.html][RegExp tester]]
+- [[https://gobyexample.com][Go by example]]
+- [[https://play.golang.org][Go playground]]
+
+* Books
+
+.image img/tgpl.jpg 500 _
+
+.link https://www.amazon.com/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440 Get it here …
+
+* Books
+
+.image img/gia.jpg 500 _
+
+.link https://www.manning.com/books/go-in-action Get it here …
