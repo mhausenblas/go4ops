@@ -135,7 +135,7 @@ Next: Language features by example, hands-on
 
 * Hands-on
 
-Get the code for the hands-on sessions:
+Either use this [[https://katacoda.com/mhausenblas/scenarios/go-containers][Katacoda environment]] in your browser of choice or set up locally by cloning the repo [[https://github.com/mhausenblas/go4ops/][mhausenblas/go4ops]]:
 
   $ cd $GOPATH
   $ mkdir -p src/github.com/mhausenblas/ && cd "$_"
@@ -335,13 +335,6 @@ Note: the full code is available at [[code/concurrency/main.go][code/concurrency
 
 See also the [[https://tour.golang.org/concurrency/1][concurrency]] section of the official Go lang tour and the [[http://www.golangprograms.com/go-language/channels.html][Working with Channels]] article.
 
-* Embedding binary content
-
-- using libraries such as [[https://github.com/jteeuwen/go-bindata][go-bindata]]
-- using `go` `generate` (see for example this [[https://blog.golang.org/generate][blog post]])
-- ship with/in container image
-
-
 * A service with an HTTP API (1/2)
 
 .code -numbers code/metricsrv/main.go
@@ -402,6 +395,12 @@ As a result of above command you should now see a 'vendor/' sub-directory in `$G
 .code -numbers code/dependency/main.go
 
 Note: the full code is available at [[code/dependency/main.go][code/dependency/main.go]]
+
+* Embedding binary content
+
+- using libraries such as [[https://github.com/jteeuwen/go-bindata][go-bindata]]
+- using `go` `generate` (see for example this [[https://blog.golang.org/generate][blog post]])
+- ship with/in container image
 
 * Go with containers
 
