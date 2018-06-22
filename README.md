@@ -4,7 +4,7 @@
 - The Go tool chain (building, testing, dependency management)
 - Language features by example
 - Writing idiomatic Go 
-- Go in and with containers (using Kubernetes) 
+- Go with containers (using Kubernetes)
 - Tasks by example
 
 ## Slides
@@ -22,3 +22,7 @@ $ present
 ```
 
 Then go to http://127.0.0.1:3999/main.slide
+
+## Resources
+
+- [Hands-on environment](https://katacoda.com/mhausenblas/scenarios/go-containers)

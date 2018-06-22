@@ -22,8 +22,8 @@ http://mhausenblas.info
 - Tooling
 - Language features by example
 - Advanced Go programming
-- Good practices (idiomatic Go, containers)
-- A standard layout
+- Go with containers
+- Good practices
 - Useful packages and tools
 - Books
 
@@ -133,30 +133,15 @@ Make sure to work through:
 
 Next: Language features by example, hands-on
 
-* Setup
+* Hands-on
 
-1. Install Go on your machine
-
-Visit [[https://golang.org/doc/install][golang.org/doc/install]] and choose your platform-dependent install procedure.
-
-2. Set up work environment
-
-For example, if you choose as your work environment `/Users/someuser/work`, then add the following to `.bashrc`:
-
-  export GOPATH=/Users/someuser/work
-  PATH=$PATH:$GOPATH/bin
-
-Note: `$GOPATH` is your base directory, all packages/binaries will be installed here.
-
-* Setup
-
-3. Get the code for the hands-on sessions
+Get the code for the hands-on sessions:
 
   $ cd $GOPATH
   $ mkdir -p src/github.com/mhausenblas/ && cd "$_"
   $ git clone https://github.com/mhausenblas/go4ops/ && cd go4ops
 
-Going forward we call the directory you cloned the repo into `$G4OHOME`, in my case: `/Users/mhausenblas/Dropbox/dev/work/src/github.com/mhausenblas/go4ops`
+Going forward we call the directory you cloned the repo into `$G4OHOME`.
 
 Some more setup-related pointers:
 
@@ -171,8 +156,7 @@ Some more setup-related pointers:
 
 To run this, do the following:
 
-  $ cd $G4OHOME/code/hello-world/
-  $ go run main.go
+  $ go run $G4OHOME/code/hello-world/main.go 
 
 *Check*: what just happened? Consult `go run -h` to learn more.
 
@@ -184,9 +168,8 @@ To run this, do the following:
 
 Do the following:
 
-  $ cd $G4OHOME/code/hello-world-for-real/
-  $ go run main.go
-  $ G4S_LANG=de go run main.go
+  $ go run $G4OHOME/code/hello-world-for-real/main.go
+  $ G4S_LANG=de go run $G4OHOME/code/hello-world-for-real/main.go
 
 *Check*: compare the output with and without the environment variable `G4S_LANG` set and explain what happened.
 
@@ -352,6 +335,13 @@ Note: the full code is available at [[code/concurrency/main.go][code/concurrency
 
 See also the [[https://tour.golang.org/concurrency/1][concurrency]] section of the official Go lang tour and the [[http://www.golangprograms.com/go-language/channels.html][Working with Channels]] article.
 
+* Embedding binary content
+
+- using libraries such as [[https://github.com/jteeuwen/go-bindata][go-bindata]]
+- using `go` `generate` (see for example this [[https://blog.golang.org/generate][blog post]])
+- ship with/in container image
+
+
 * A service with an HTTP API (1/2)
 
 .code -numbers code/http-service/main.go
@@ -412,18 +402,9 @@ As a result of above command you should now see a 'vendor/' sub-directory in `$G
 
 Note: the full code is available at [[code/dependency/main.go][code/dependency/main.go]]
 
-* Good practices
+* Go with containers
 
-* Idiomatic Go
-
-- [[https://golang.org/doc/effective_go.html][Effective Go]]
-- [[https://www.youtube.com/watch?v=PAAkCSZUG1c][Go Proverbs]]
-- [[http://peter.bourgon.org/go-best-practices-2016/][Go best practices, six years in]]
-- [[https://www.youtube.com/watch?v=29LLRKIL_TI][7 common mistakes in Go and when to avoid them]]
-- [[https://github.com/ksimka/go-is-not-good][ksimka/go-is-not-good]]
-- [[https://www.youtube.com/watch?v=gHCtEjzZ-rY][A Look at the Criticism of Go]]
-
-* Go and containers (1/4)
+* Go with containers (1/4)
 
 Approaches:
 
@@ -441,7 +422,7 @@ Approaches:
 
 Let's have a look at concrete example in [[code/containers/][code/containers]] …
 
-* Go and containers (2/4)
+* Go with containers (2/4)
 
 Example `Dockerfile` for *full-blown* approach:
 
@@ -459,7 +440,7 @@ If you've got Docker installed, you can try out:
   $ curl localhost:8888/ping
   $ docker kill fbping
 
-* Go and containers (3/4)
+* Go with containers (3/4)
 
 Example `Dockerfile` for *light-weight* approach:
 
@@ -480,7 +461,7 @@ If you've got Docker installed, you can try out:
   $ curl localhost:8888/ping
   $ docker kill lwping
 
-* Go and containers (4/4)
+* Go with containers (4/4)
 
 Compare resulting images:
 
@@ -494,13 +475,16 @@ When to use and some tips, see:
 - [[https://medium.com/statuscode/golang-docker-for-development-and-production-ce3ad4e69673][post]] on Medium
 - [[https://www.oreilly.com/ideas/should-you-containerize-your-go-code][article]] on O'Reilly Radar
 
-* Embedding binary content
+* Good practices
 
-- using libraries such as [[https://github.com/jteeuwen/go-bindata][go-bindata]]
-- using `go` `generate` (see for example this [[https://blog.golang.org/generate][blog post]])
-- ship with/in container image
+* Idiomatic Go
 
-* A standard layout
+- [[https://golang.org/doc/effective_go.html][Effective Go]]
+- [[https://www.youtube.com/watch?v=PAAkCSZUG1c][Go Proverbs]]
+- [[http://peter.bourgon.org/go-best-practices-2016/][Go best practices, six years in]]
+- [[https://www.youtube.com/watch?v=29LLRKIL_TI][7 common mistakes in Go and when to avoid them]]
+- [[https://github.com/ksimka/go-is-not-good][ksimka/go-is-not-good]]
+- [[https://www.youtube.com/watch?v=gHCtEjzZ-rY][A Look at the Criticism of Go]]
 
 * A standard layout (1/2)
 
@@ -581,6 +565,9 @@ to manage S3 (compatible) storage systems:
 
 to access the GitHub API:
 .link https://github.com/google/go-github google/go-github
+
+to gather OS metrics:
+.link https://github.com/shirou/gopsutil shirou/gopsutil
 
 More via [[https://github.com/avelino/awesome-go][awesome-go]] …
 
