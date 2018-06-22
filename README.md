@@ -26,3 +26,8 @@ Then go to http://127.0.0.1:3999/main.slide
 ## Resources
 
 - [Hands-on environment](https://katacoda.com/mhausenblas/scenarios/go-containers)
+- [Effective Go](https://golang.org/doc/effective_go.html)
+- [Go Proverbs](https://www.youtube.com/watch?v=PAAkCSZUG1c)
+- [Go by example](https://gobyexample.com)
+- [Go playground](https://play.golang.org)
+- [avelino/awesome-go](https://github.com/avelino/awesome-go)
