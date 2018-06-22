@@ -404,7 +404,7 @@ Note: the full code is available at [[code/dependency/main.go][code/dependency/m
 
 * Go with containers
 
-* Go with containers (1/4)
+* Go with containers (1/5)
 
 Approaches:
 
@@ -420,60 +420,73 @@ Approaches:
 - copy the resulting Go binary and potential artifacts such as images or style sheets
 - small footprint, contains only the necessary bits
 
-Let's have a look at concrete example in [[code/containers/][code/containers]] …
+Note: Use the [[https://katacoda.com/mhausenblas/scenarios/go-containers][Go with containers]] Katacoda scenario.
 
-* Go with containers (2/4)
+* Go with containers (2/5)
 
 Example `Dockerfile` for *full-blown* approach:
 
-  FROM golang:1.9
-  COPY ./myapp /go/src/github.com/mhausenblas/myapp/
-  WORKDIR /go/src/github.com/mhausenblas/myapp
-  RUN go get ./
-  RUN go build
-  ./myapp
+.code code/containers/fbDockerfile
 
-If you've got Docker installed, you can try out:
+You can build the container image and launch the container then:
 
-  $ docker build --tag=mhausenblas/pingsvc:1 --file=fbDockerfile .
-  $ docker run --rm --name fbping -d -p 8888:8888 mhausenblas/pingsvc:1
+  $ cd $G4OHOME/code/containers  
+  $ docker build --tag=quay.io/mhausenblas/pingsvc:1 --file=fbDockerfile .
+  $ docker run --rm --name fbping -d -p 8888:8888 quay.io/mhausenblas/pingsvc:1
   $ curl localhost:8888/ping
   $ docker kill fbping
 
-* Go with containers (3/4)
+* Go with containers (3/5)
 
 Example `Dockerfile` for *light-weight* approach:
 
-  FROM centos:7
-  WORKDIR /app
-  COPY ui/* ui/
-  RUN chown -R 1001:1 /app
-  USER 1001
-  COPY myapp .
-  RUN chmod +x myapp
-  CMD ["/app/myapp"]
+.code code/containers/lwDockerfile
 
-If you've got Docker installed, you can try out:
+You can build the container image and launch the container then:
 
+  $ cd $G4OHOME/code/containers
   $ GOOS=linux GOARCH=amd64 go build
-  $ docker build --tag=mhausenblas/pingsvc:2 --file=lwDockerfile .
-  $ docker run --rm --name lwping -d -p 8888:8888 mhausenblas/pingsvc:2
+  $ docker build --tag=quay.io/mhausenblas/pingsvc:2 --file=lwDockerfile .
+  $ docker run --rm --name lwping -d -p 8888:8888 quay.io/mhausenblas/pingsvc:2
   $ curl localhost:8888/ping
   $ docker kill lwping
 
-* Go with containers (4/4)
+* Go with containers (4/5)
 
 Compare resulting images:
 
   $ docker images "mhausenblas/pingsvc*"
-  REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-  mhausenblas/pingsvc   2                   221aede73f00        2 minutes ago       198 MB
-  mhausenblas/pingsvc   1                   74f9e2a7dcc8        10 minutes ago      741 MB
+  REPOSITORY            TAG                 IMAGE ID            CREATED              SIZE
+  mhausenblas/pingsvc   2                   015d86afb5ea        24 seconds ago       206 MB
+  mhausenblas/pingsvc   1                   4b316f538153        About a minute ago   762 MB
 
 When to use and some tips, see:
 
 - [[https://medium.com/statuscode/golang-docker-for-development-and-production-ce3ad4e69673][post]] on Medium
 - [[https://www.oreilly.com/ideas/should-you-containerize-your-go-code][article]] on O'Reilly Radar
+
+* Go with containers (5/5)
+
+Now let's push the container image to a container registry and launch it in Kubernetes:
+
+  $ docker push quay.io/mhausenblas/pingsvc:2
+  
+  $ kubectl run pingsvc --image=quay.io/mhausenblas/pingsvc:2 --port=8888
+  $ kubectl expose deploy/pingsvc
+  $ kubectl get deploy,po,svc
+  NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+  pingsvc   1         1         1            1           1m
+  
+  NAME                       READY     STATUS    RESTARTS   AGE
+  pingsvc-58fc565c9c-84dvn   1/1       Running   0          1m
+  
+  NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+  kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP    32m
+  pingsvc      ClusterIP   10.104.109.87   <none>        8888/TCP   1m
+  
+  $ kubectl run -i -t --rm jumpod --restart=Never \
+                      --image=quay.io/mhausenblas/jump:0.2 curl pingsvc:8888/ping
+
 
 * Good practices
 

@@ -1,5 +1,7 @@
 FROM centos:7
 WORKDIR /app
+RUN chown -R 1001:1 /app
+USER 1001
 COPY containers pingsvc
 EXPOSE 8888
 CMD ["/app/pingsvc"]
