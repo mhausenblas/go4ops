@@ -344,21 +344,22 @@ See also the [[https://tour.golang.org/concurrency/1][concurrency]] section of t
 
 * A service with an HTTP API (1/2)
 
-.code -numbers code/http-service/main.go
+.code -numbers code/metricsrv/main.go
 
 * A service with an HTTP API (2/2)
 
 In one terminal session do:
 
-  $ cd $G4OHOME/code/http-service/
+  $ cd $G4OHOME/code/metricsrv/
+  $ go get github.com/shirou/gopsutil && go get golang.org/x/sys/unix
   $ go run main.go
 
-… and in another session, from any directory:
+… and in another terminal, from any directory:
 
-  $ curl http://127.0.0.1:9876/data
-  {"title":"Let’s Go! Using the Go programming language for system tasks","count":22}
+  $ curl localhost:9876/metrics
+  {"memory_total":2097164288}
 
-Note: the full code is available at [[code/http-service/main.go][code/http-service/main.go]]
+Note: the full code is available at [[code/metricsrv/main.go][code/metricsrv/main.go]]
 
 For a more realistic setup use a HTTP request multiplexer such as [[http://www.gorillatoolkit.org/pkg/mux][gorilla/mux]].
 
