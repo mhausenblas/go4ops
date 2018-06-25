@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/mhausenblas/go4systasks/day1/code/modules/something"
+	"github.com/mhausenblas/go4ops/code/modules/something"
 )
 
 func main() {
