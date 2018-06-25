@@ -30,4 +30,5 @@ Then go to http://127.0.0.1:3999/main.slide
 - [Go Proverbs](https://www.youtube.com/watch?v=PAAkCSZUG1c)
 - [Go by example](https://gobyexample.com)
 - [Go playground](https://play.golang.org)
+- [campoy/go-tooling-workshop](https://github.com/campoy/go-tooling-workshop)
 - [avelino/awesome-go](https://github.com/avelino/awesome-go)
