@@ -169,9 +169,7 @@ To run this, do the following:
 Do the following:
 
   $ go run $G4OHOME/code/hello-world-for-real/main.go
-  $ G4S_LANG=de go run $G4OHOME/code/hello-world-for-real/main.go
-
-*Check*: compare the output with and without the environment variable `G4S_LANG` set and explain what happened.
+  $ G4O_LANG=nl go run $G4OHOME/code/hello-world-for-real/main.go
 
 Note:
 
