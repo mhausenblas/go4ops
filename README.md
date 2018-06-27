@@ -9,13 +9,21 @@
 
 ## Slides
 
+Online version:
+
+http://301.sh/go4ops
+
+Local version:
+
+Install the `present` tool:
+
 ```bash
 $ go get golang.org/x/net
 $ go get golang.org/x/tools
 $ go install golang.org/x/tools/cmd/present
 ```
 
-When the `present` tool is installed, you can use it like so to view the slides locally:
+Now can use it like so to view the slides locally:
 
 ```bash
 $ present
