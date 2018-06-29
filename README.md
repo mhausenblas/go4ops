@@ -11,7 +11,7 @@
 
 Online version:
 
-http://301.sh/go4ops
+https://301.sh/go4ops
 
 Local version:
 
